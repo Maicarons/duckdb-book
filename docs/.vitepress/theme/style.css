@@ -1,0 +1,27 @@
+:root {
+  --vp-font-family-base: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",
+    "Source Han Sans SC", "Noto Sans CJK SC", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --vp-font-family-mono: "Cascadia Code", "JetBrains Mono", "Fira Code",
+    Consolas, "Courier New", monospace;
+}
+
+/* 代码块与表格在中文排版下更紧凑、易读 */
+.vp-doc :not(pre) > code {
+  white-space: break-spaces;
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+  font-size: 0.9em;
+}
+
+/* 让 PDF 内嵌框在深浅色主题下都有边框 */
+.pdf-frame {
+  width: 100%;
+  height: 880px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+}

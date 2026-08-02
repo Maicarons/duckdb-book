@@ -1,0 +1,19 @@
+{
+  "name": "duckdb-book",
+  "version": "1.5.5",
+  "private": true,
+  "type": "module",
+  "description": "DuckDB 数据库从入门到进阶 —— 基于官方文档 v1.5.5 的系统性实战指南（VitePress 文档站）",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "normalize": "python tools/normalize_chapters.py",
+    "build:book": "python tools/build_book.py",
+    "build:pptx": "python tools/build_pptx.py"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13"
+  }
+}
