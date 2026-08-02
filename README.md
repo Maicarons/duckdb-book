@@ -2,6 +2,8 @@
 
 > 基于 **DuckDB v1.5.5** 官方文档的系统性实战指南 —— 进程内 · 列式 · 向量化的分析型数据库，从入门到进阶。
 
+[![Deploy to GitHub Pages](https://github.com/Maicarons/duckdb-book/actions/workflows/deploy.yml/badge.svg)](https://github.com/Maicarons/duckdb-book/actions/workflows/deploy.yml)
+
 - 📖 在线文档站（GitHub Pages）：<https://maicarons.github.io/duckdb-book/>
 - 📘 整书 PDF / DOCX、教学 PPTX 讲义：见站点内「下载与资源」页
 
@@ -64,28 +66,14 @@ python tools/build_pptx.py            # 生成教学 PPTX 至 public/downloads
 
 整书 PDF 由 `DuckDB从入门到进阶.docx` 经 Pandoc + XeLaTeX（CJK 字体：Microsoft YaHei）转换生成，存放于 `docs/public/downloads/duckdb-book.pdf`。
 
-## 部署（GitHub Pages）
+## 部署（GitHub Pages · GitHub Actions 自动部署）
 
 站点已上线：<https://maicarons.github.io/duckdb-book/>
 
-当前采用 **「从分支部署」(Deploy from a branch)** 方式：
+采用 **GitHub Actions 自动部署**：每次 push `main` 即自动构建并发布。
 
-- 源码与内容在 `main` 分支；
-- 构建产物（`docs/.vitepress/dist`）发布到 `gh-pages` 分支；
-- 仓库 Pages 源已设为 `gh-pages` 分支 `/` 根目录。
-
-如需改为 **GitHub Actions 自动部署**（每次 push `main` 自动构建并发布），仓库根目录已提供 `deploy-github-pages.yml`：
-
-```bash
-# 1) 将其移入 workflows 目录
-mv deploy-github-pages.yml .github/workflows/deploy.yml
-# 2) 当前 token 缺少 workflow scope 时需先授权（在本地执行）：
-gh auth refresh -s workflow
-# 3) 提交并推送，Actions 将自动构建并部署
-git add -A && git commit -m "ci: add pages deploy workflow" && git push
-```
-
-> 也可直接在 GitHub 网页端 Settings → Pages 中查看/切换部署源；或在网页端新建 `.github/workflows/deploy.yml` 文件（网页端提交不受本地 token scope 限制）。
+- 工作流文件：`.github/workflows/deploy.yml`（`checkout` → Setup Node 22 → `npm install` → `npm run docs:build` → 上传 Pages 产物 → `actions/deploy-pages` 发布）；
+- 仓库 Pages **部署源已设为 GitHub Actions**（不再从 `gh-pages` 分支读取）；`gh-pages` 分支保留为历史备份。
 
 ## 版权与免责声明
 
