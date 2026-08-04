@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1F4E79"/>
+      <stop offset="1" stop-color="#2E6DA4"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="52" height="52" rx="12" fill="url(#g)"/>
+  <rect x="6" y="6" width="52" height="6" rx="3" fill="#ED7D31"/>
+  <text x="32" y="30" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">Duck</text>
+  <text x="32" y="46" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="13" fill="#CFDEEF" text-anchor="middle">DB</text>
+</svg>

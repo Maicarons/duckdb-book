@@ -132,7 +132,7 @@ duckdb file.db < script.sql
 duckdb :memory: "SELECT 42 AS the_answer"
 ```
 
-需要隔离不可信脚本的场景，安全模式（Safe Mode）派得上用场。启动时加 `-safe` 参数，或在会话里敲 `.safe_mode`，都会禁用 `.cd`、`.import`、`.read`、`.open`、`.sh` 等触及外部文件系统的点命令，并把 `enable_external_access` 关掉——此后 `ATTACH` 文件、`COPY` 读写、`read_csv/read_parquet` 全部失效。要紧的是，安全模式一旦开启，同一会话内无法再关闭，这是刻意为之的纵深防御设计。
+需要隔离不可信脚本的场景，安全模式（Safe Mode）派得上用场。在 CLI 会话中执行 `.safe_mode` 点命令即可进入安全模式（官方明确：一旦开启，同一会话内无法再关闭），它会禁用 `.cd`、`.import`、`.read`、`.open`、`.sh` 等触及外部文件系统的点命令，并把 `enable_external_access` 关掉——此后 `ATTACH` 文件、`COPY` 读写、`read_csv/read_parquet` 全部失效。要紧的是，安全模式一旦开启，同一会话内无法再关闭，这是刻意为之的纵深防御设计。
 
 1.5.x 系列给 CLI 加了一项贴心改进：Query Completion ETA。基于 Kalman 滤波（Kalman filter），CLI 能在进度条上估算查询的剩余时间。需留意它的局限——在内存压力大、I/O 瓶颈或网络延迟明显的场景下，估算会变得不准，甚至可能不再单调递减。相关开关藏在 `enable_progress_bar` 与 `progress_bar_time`（触发进度条的最小毫秒数，默认 2000）里，用 `duckdb_settings()` 即可查到。
 

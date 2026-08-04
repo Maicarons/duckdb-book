@@ -39,14 +39,14 @@ SELECT TRY_CAST('abc' AS INTEGER);   -- NULL，解析失败时返回 NULL 而非
 
 `TRY_CAST` 在解析失败时返回 `NULL`，非常适合清洗来源不可信的数据；与之同源的 `TRY(expr)` 也能让会抛错的表达式在该行降级为 `NULL`（但不能包裹易变函数、聚合或标量子查询）。
 
-**Lambda 表达式（版本敏感）。** 列表变换、列批量处理等场景会用到匿名函数 lambda。DuckDB 采用 Python 风格的双冒号写法：
+**Lambda 表达式（版本敏感）。** 列表变换、列批量处理等场景会用到匿名函数 lambda。DuckDB 用冒号（colon）书写 lambda，推荐显式写成 Python 风格的 `lambda x : x + 1`：
 
 ```sql
 SELECT list_transform([1, 2, 3], x : x + 1);          -- [2, 3, 4]
 SELECT list_transform([1, 2, 3], lambda x : x * x);   -- [1, 4, 9]
 ```
 
-单箭头写法 `x -> x + 1` **已在 v1.3 弃用**。其弃用路线图值得记牢：v1.3 起弃用单箭头；**v1.5 是最后一个默认仍可在不开开关的情况下使用单箭头的版本**；v2.0 起默认禁用单箭头；v2.1 移除 `lambda_syntax` 开关。因此面向未来，一律推荐 `x : x + 1` 或 `lambda x : x + 1`。如需临时恢复旧写法，可用设置项 `lambda_syntax = ENABLE_SINGLE_ARROW`。
+单箭头写法 `x -> x + 1` **已在 v1.3 弃用**。其弃用路线图值得记牢：v1.3 起弃用单箭头；**v1.5 是最后一个默认仍可在不开开关的情况下使用单箭头的版本**；v2.0 起默认禁用单箭头；v2.1 移除 `lambda_syntax` 开关。因此面向未来，一律推荐 `lambda x : x + 1`（无关键字写法 `x : x + 1` 亦可，但未弃用、仅不推荐为首选）。如需临时恢复旧写法，可用设置项 `SET lambda_syntax = 'ENABLE_SINGLE_ARROW';`。
 
 **星号与 COLUMNS()。** `*` 及其变体是列选择的有力工具：`SELECT * EXCLUDE (secret)` 排除某列，`REPLACE (...)` 替换某列表达式，`RENAME (...)` 重命名；`SELECT * LIKE 'col%'`、`* GLOB 'col*'`、`* SIMILAR TO 'col.'` 支持模式匹配。`COLUMNS(...)` 则对多列批量套用同一表达式，可接收正则、列名列表，或 `lambda c: c LIKE '%num%'` 这样的列过滤：
 
@@ -119,7 +119,8 @@ SELECT concat('a', NULL, 'b');     -- 'ab'（自动跳过 NULL）
 常用基础函数一览：
 
 ```sql
-SELECT length('Hello🦆');          -- 6（字符数；strlen 返回字节数，此处为 4）
+SELECT length('Hello🦆');          -- 6（字符数）
+SELECT strlen('Hello🦆');          -- 9（字节数：'Hello'=5B + 🦆=4B）
 SELECT lower('DuckDB'), upper('DuckDB');
 SELECT substring('Hello', 2, 2);   -- 'el'（起始下标为 1）
 SELECT replace('hello', 'l', '-'); -- 'he--o'
@@ -224,10 +225,11 @@ SELECT '{"name":"duck"}' -> '$.name';    -- JSON 片段
 SELECT '{"name":"duck"}' ->> '$.name';   -- 'duck'（文本）
 ```
 
-当需要对 JSON 内部的值做变换时，可用 `json_transform`，它沿一个 JSON 路径表达式匹配目标，并以 lambda 改写匹配到的值：
+当需要根据结构定义把 JSON 重塑为目标类型时，可用 `json_transform`，它依据给定的结构串把 JSON 重塑/转换为目标类型（别名为 `from_json`）：
 
 ```sql
-SELECT json_transform('{"a":1}', '$.a', x : x + 10);   -- {"a": 11}
+SELECT json_transform('{"a":1}', '{"a":"INTEGER"}');   -- {"a":1}
+-- 另有 json_transform_strict 可做严格转换（类型不匹配时报错而非返回 NULL）
 ```
 
 JSON 路径使用 `$.key` 形式访问对象字段、`$[i]` 访问数组元素。由于这些能力来自 json 扩展，若环境中该扩展未启用，需先 `INSTALL json` 并 `LOAD json`（在多数 v1.x 安装中会自动加载，无需手动干预）。
@@ -246,7 +248,7 @@ SELECT IFNULL(a, b), NULLIF(a, b), IF(score > 60, 'pass', 'fail') FROM exam;
 SELECT typeof(42), typeof('x'), version();
 ```
 
-**哈希与编码**：`hash(value)` 返回 `UBIGINT`，属于非加密哈希，适合做分桶或去重判等；若需要加密级摘要，可用 `md5(s)`、`sha1(value)`、`sha256(value)`，后两者返回 `VARCHAR`：
+**哈希与编码**：`hash(value)` 返回 `UBIGINT`，属于非加密哈希，适合做分桶或去重判等；若需要加密级摘要，可用 `md5(s)`、`sha1(value)`、`sha256(value)`，三者均返回 `VARCHAR`（十六进制字符串）；另有 `md5_number` 返回 `UBIGINT`/`UHUGEINT`：
 
 ```sql
 SELECT hash('duckdb'), md5('duckdb'), sha256('duckdb');

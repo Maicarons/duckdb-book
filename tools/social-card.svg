@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1F4E79"/>
+      <stop offset="1" stop-color="#2E6DA4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="10" fill="#ED7D31"/>
+  <text x="90" y="250" font-size="76" font-weight="700" fill="#FFFFFF">DuckDB 数据库从入门到进阶</text>
+  <text x="92" y="320" font-size="34" fill="#CFDEEF">基于官方文档 v1.5.5 的系统性实战指南</text>
+  <text x="92" y="380" font-size="28" fill="#B9CCE2">进程内 · 列式 · 向量化 · 19 章 7 大板块</text>
+  <g fill="#ED7D31" font-size="26" font-weight="700">
+    <rect x="92" y="450" width="360" height="56" rx="28" fill="#ED7D31"/>
+    <text x="272" y="488" fill="#1F4E79" text-anchor="middle">在线阅读 · PDF 下载 · 教学讲义</text>
+  </g>
+  <text x="92" y="580" font-size="22" fill="#9FB6D1">https://maicarons.github.io/duckdb-book/</text>
+</svg>

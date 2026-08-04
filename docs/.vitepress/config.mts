@@ -69,6 +69,7 @@ export default defineConfig({
   description:
     '基于 DuckDB v1.5.5 官方文档的系统性实战指南：进程内、列式、向量化的分析型数据库，从入门到进阶。',
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/duckdb-book/favicon.svg' }],
     ['meta', { name: 'keywords', content: 'DuckDB, 数据库, OLAP, 列式存储, 向量化, 数据分析, 嵌入式数据库, 教程' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:locale', content: 'zh_CN' }],
@@ -76,10 +77,20 @@ export default defineConfig({
     ['meta', { name: 'og:description', content: '基于 DuckDB v1.5.5 官方文档的系统性实战指南：从入门到进阶的进程内分析型数据库教程。' }],
     ['meta', { name: 'og:url', content: 'https://maicarons.github.io/duckdb-book/' }],
     ['meta', { name: 'og:site_name', content: 'DuckDB 数据库从入门到进阶' }],
+    ['meta', { name: 'og:image', content: 'https://maicarons.github.io/duckdb-book/og-image.png' }],
+    ['meta', { name: 'og:image:width', content: '1200' }],
+    ['meta', { name: 'og:image:height', content: '630' }],
+    ['meta', { name: 'og:image:alt', content: 'DuckDB 数据库从入门到进阶 — 基于官方文档 v1.5.5 的系统性实战指南' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:image', content: 'https://maicarons.github.io/duckdb-book/og-image.png' }],
+    ['meta', { name: 'twitter:image:alt', content: 'DuckDB 数据库从入门到进阶' }],
   ],
   lastUpdated: true,
   cleanUrls: true,
+  build: {
+    // VitePress 本地搜索索引较大，属正常现象；上调阈值消除构建噪音
+    chunkSizeWarningLimit: 3000,
+  },
   editLink: {
     pattern: 'https://github.com/Maicarons/duckdb-book/edit/main/docs/:path',
     text: '在 GitHub 上编辑此页',
