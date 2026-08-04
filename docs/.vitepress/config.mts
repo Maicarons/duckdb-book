@@ -68,8 +68,22 @@ export default defineConfig({
   title: 'DuckDB 数据库从入门到进阶',
   description:
     '基于 DuckDB v1.5.5 官方文档的系统性实战指南：进程内、列式、向量化的分析型数据库，从入门到进阶。',
+  head: [
+    ['meta', { name: 'keywords', content: 'DuckDB, 数据库, OLAP, 列式存储, 向量化, 数据分析, 嵌入式数据库, 教程' }],
+    ['meta', { name: 'og:type', content: 'website' }],
+    ['meta', { name: 'og:locale', content: 'zh_CN' }],
+    ['meta', { name: 'og:title', content: 'DuckDB 数据库从入门到进阶' }],
+    ['meta', { name: 'og:description', content: '基于 DuckDB v1.5.5 官方文档的系统性实战指南：从入门到进阶的进程内分析型数据库教程。' }],
+    ['meta', { name: 'og:url', content: 'https://maicarons.github.io/duckdb-book/' }],
+    ['meta', { name: 'og:site_name', content: 'DuckDB 数据库从入门到进阶' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+  ],
   lastUpdated: true,
   cleanUrls: true,
+  editLink: {
+    pattern: 'https://github.com/Maicarons/duckdb-book/edit/main/docs/:path',
+    text: '在 GitHub 上编辑此页',
+  },
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },

@@ -36,8 +36,8 @@ DuckDB 正在重新定义"分析型数据库"的部署形态。它不走"起一�
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
-# 第一部分 基础入门
 
+# 第一部分 基础入门
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -138,8 +138,6 @@ DuckDB 有四项技术支柱：列式存储（columnar storage）、向量化执
 本章给出了 DuckDB 的清晰轮廓：它是一个**进程内、面向分析（OLAP）的列式数据库**，无独立服务进程，常见形态为单文件或纯内存。它的便利性继承自 SQLite 的"嵌入式"基因，分析能力则来自列存与向量化执行。与 SQLite（行存 OLTP）、PostgreSQL（客户端—服务器 OLTP）、ClickHouse（客户端—服务器列式 OLAP）相比，DuckDB 占据"嵌入式便利 × 分析能力"的交叉生态位，定位为分析库而非主数据库。
 
 四条技术支柱中，本章用直觉讲清了**列式存储**（按列连续存放，分析查询只读所需列、压缩率更高）与**向量化执行**（以 2048 行为一批的推送式批处理，摊薄调用开销、利好 SIMD 与压缩执行）；剩余两柱——轻量压缩与 MVCC——将在后续性能与原理章节展开。带着"它跑在我的进程里、为分析而优化"这一核心认知，即可进入下一章的动手实践。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -347,8 +345,6 @@ con.close()
 - CLI 的能力集中在点命令上，`.help`、`.mode`、`.tables`、`.schema`、`.import`、`.read`、`.timer` 最常用；安全模式与 1.5.x 新增的 Query Completion ETA 分别服务于隔离与体验两个不同诉求。
 - 连接的本质是进程内（in-process）嵌入式架构——零网络、单文件、无服务进程；多进程并发写需借助 Quack（beta）或 DuckLake。
 - 验证安装不必复杂：CLI 的 `version()` 与 Python 的 `duckdb.sql(...).fetchall()` 各一行足矣。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -538,8 +534,6 @@ SELECT a, b EXCLUDE (c) FROM t;             -- 排除列
 - **友好 SQL**：自动类型推断、`FROM`-first、`GROUP BY ALL`、前缀别名等语法糖，是 DuckDB 提升分析效率的利器。
 
 下一章将从这些基础类型出发，进入表的创建、约束与模式的实践。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -829,8 +823,6 @@ ROLLBACK;   -- 或 ABORT，二者等价
 本章把 DuckDB 的"定义与写入"骨架铺开：`CREATE TABLE` 与各类约束、CTAS 由查询建表；临时表与会话同生灭、位于 `temp.main`；生成列当前仅 `VIRTUAL` 一种；`DEFAULT` 给出稳妥初值。写入侧，`INSERT` 配 `ON CONFLICT` 实现 upsert、`BY NAME` 按名匹配、`RETURNING` 回传结果；`UPDATE`/`DELETE` 借 `FROM` 连表高效批量，`DELETE` 仅标记删除、靠 `CHECKPOINT` 回收空间；`MERGE INTO` 则以单语句完成无主键表的合并更新，并自 v1.4.0 起支撑 SCD Type 2。
 
 视图、宏、模式、序列与自定义类型，是把逻辑与结构组织、复用起来的工具箱。最后的事务与并发模型点出 DuckDB 的进程内本性：MVCC 快照隔离保证 repeatable reads，但单事务只写一个库、写写冲突需重跑、外键不支持级联删除与自引用。带着这些约束意识，下一章即可安心展开数据类型与单文件 / 内存数据库的细致用法。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -1220,8 +1212,6 @@ INTO NAME year VALUE amount;
 连接类型中，`SEMI`/`ANTI` 补上了 `IN`/`NOT IN` 的表达缺口，其中 `ANTI` 自动规避 `NOT IN` 遇 NULL 失效的陷阱；`LATERAL`、`POSITIONAL`、`ASOF` 三种特色连接分别解决了相关子查询、按物理位置对齐、时序就近匹配三类真实问题。自连接务必起别名。
 
 集合运算的 `UNION [ALL] BY NAME` 用列名而非位置对齐，让结构相近的表合并不再需要先手工对齐列序。窗口函数以 `OVER`、帧规范、`WINDOW` 命名复用与 `QUALIFY` 过滤构成完整工具链，`fill()` 则把时序线性插值压成一行。CTE 与 `WITH RECURSIVE` 是表达层级与图的利器，物化可控、环检测靠 `list_position`/`list_contains`、键式更新靠 `USING KEY`；版本上务必用 `UNION ALL` 以保证对 2.0+ 的兼容。最后，`TABLESAMPLE`/`USING SAMPLE` 抽样、`VALUES` 构造与 `PIVOT`/`UNPIVOT` 旋转，补足了数据整形（reshaping）的最后一公里。带着这些特性回看日常 SQL，多数"绕弯路"的写法都能在 DuckDB 里找到更短的直路。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -1511,12 +1501,7 @@ CALL duckdb_functions();            -- 全部函数（含类型、返回类型�
 
 其四，**元数据靠两个体系**。`information_schema` 视图走 SQL 标准，`duckdb_*` 表函数族信息更全、且是规范的真正源头——记住它们无参也要加括号，这是区分标量函数与表函数的硬界线。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第二部分 数据工程
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -1857,8 +1842,6 @@ SELECT *, filename FROM read_parquet('orders/*/*/*.parquet', hive_partitioning =
 - **多文件与分区**：glob（`*` / `**` / `?` / `[abc]`）与文件列表批量读取；`union_by_name` 按列名合并；Hive 分区自动检测并支持分区键下推（partition pruning）；`filename` 虚拟列（v1.3.0+）为每行标注来源文件，是溯源与排查的有力工具。
 
 掌握这些直读能力后，数据工程中的"取数"环节几乎零门槛；下一章起将转向数据的写出与跨源交换。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -2052,12 +2035,7 @@ UPDATE EXTENSIONS (name_a, name_b);-- 更新指定
 - 写入先入 WAL，由 CHECKPOINT 合并进主文件，`wal_autocheckpoint` 默认 16 MiB 自动触发；`DELETE`/`UPDATE` 仅标记删除，空间回收靠 CHECKPOINT 或整库重建，而 `VACUUM` 不回收空间——这一点与 PostgreSQL 语义不同。
 - 全库迁移用 `COPY FROM DATABASE ... TO`（或 `EXPORT/IMPORT DATABASE`）；跨 DuckDB 版本时须以 `FORCE INSTALL` / `UPDATE EXTENSIONS` 重装匹配版本的扩展。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第三部分 客户端与生态集成
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -2127,7 +2105,6 @@ with duckdb.connect("file.db") as con:
 
 ```python
 con = duckdb.connect("file.db", read_only=True)
-```
 ```
 
 ### 9.1.3 线程与并发
@@ -2464,8 +2441,6 @@ conn = duckdb.connect("path/to/my.duckdb.db")   # marimo 自动识别
 - **生态集成**：Jupyter 中可用 jupysql 魔法命令，duckdb-engine 提供 SQLAlchemy 连接串（`duckdb:///:memory:` 等）；marimo 则以响应式、纯 Python 文件的形式，把 SQL 与 Python 无缝编织进可复现的分析流。
 
 下一章将走出 Python 单进程，进入 DuckDB 在更大工程场景中的扩展与集成。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -2721,8 +2696,6 @@ Tertiary 层级由社区维护、无支持保证。代表性成员包括：
 - **C / C++ API**：C API（`duckdb_open` / `duckdb_query` / `duckdb_prepare` / `duckdb_appender`）属 Primary 层级、稳定可用，是嵌入自有系统的首选；C++ API 仅为内部接口、随时可能变动，生产代码不应依赖。
 - **Node.js / ODBC / Wasm**：Node.js 经 `@duckdb/node-api` 提供实例缓存、Appender 与 chunk 流式取数；ODBC 驱动遵循 3.0 规范，须靠 `odbc.ini` / `odbcinst.ini` 的 DSN 配置接驳；DuckDB-Wasm 有 mvp / eh 两种包，但受单线程与 4 GB 内存上限约束。
 - **第三方客户端**：R、Go、Rust、Java/JDBC 实为 Primary 层级并受社区支持；Julia、Swift、Dart、PHP 等才是 Tertiary 层级、由社区维护。无论层级，Appender 都是批量写入的最快路径，且所有客户端共享同一 SQL 语法、磁盘格式与 Arrow 互操作能力。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -2870,8 +2843,6 @@ SHOW TABLES;
 - PostgreSQL 路径用 postgres（postgres_scanner）扩展，支持整库挂载、单表 `postgres_scan` 与 `postgres_query`/`postgres_execute` 辅助函数；RDS/Aurora 借助 aws 扩展的 `TYPE rds` secret 实现 IAM 令牌自动刷新；v1.5.5 的 `pg_staleness_query_enabled` 可在 schema 变化时自动失效缓存。
 - SQLite 路径用 sqlite 扩展挂载文件，注意类型亲和（type affinity）与 `sqlite_all_varchar` 脏数据兜底，并兼容 Turso/libSQL。
 - MySQL 路径用 mysql 扩展，连接串务必采用 PostgreSQL 风格；`mysql_tinyint1_as_boolean` / `mysql_bit1_as_boolean` 贴合布尔惯例，且须记住 MySQL DDL 非事务性这一约束。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -3042,12 +3013,7 @@ Quack 当前为 beta，在生产环境使用尚不成熟，可能包含破坏性
 
 本章覆盖了 DuckDB 跨越本地边界的三组能力。**其一，`httpfs` 扩展**统一了所有远程文件访问：S3、GCS、Azure、HTTP(S)、Cloudflare R2、Fastly、Tigris、S3 Express 与 Iceberg 经同一网络栈读写，远程 DuckDB 库则只能以只读方式 `ATTACH`。**其二，`CREATE SECRET`** 集中管理跨后端凭证，支持显式密钥与 `credential_chain` 链式临时凭据；持久 secret 以未加密二进制存于 `~/.duckdb/stored_secrets`（权限 600），明文落盘须谨慎对待。远程读取的性能关键在于用并行度抵消网络延迟、用 spill to disk 容纳超内存负载、并用列裁剪/过滤/范围/LIMIT 下推与远程缓存尽量压缩传输量。**其三，Quack 远程协议**借助 `application/duckdb` 序列化（与 WAL 共享代码路径）与 token 认证，把 DuckDB 变成可被 `quack_query` 或 `ATTACH` 连接的 HTTP 服务，默认端口 9494；它仍处 beta，生产部署须前置 TLS 反向代理，并预期在 v2.0 稳定。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第四部分 扩展机制
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -3220,8 +3186,6 @@ LOAD tarfs;
 - **社区仓库 2024 年夏上线**，由社区维护、独立版本化，使用方式一致且同样受版本约束，丰富了 DuckDB 的能力边界。
 
 掌握扩展的安装、加载、版本与安全机制后，下一章将进入自定义函数（UDF）与扩展开发，把这套体系延伸到你自己的代码之中。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -3413,12 +3377,7 @@ SELECT * FROM vss_match('vec_tbl', 'vec', [0.1, 0.2, 0.3]);
 - iceberg 支持路径与目录两种模式，v1.5.5 兼容 V3 spec（VARIANT、TIMESTAMP_NS、默认值、binary deletion vectors），但写入仅限 positional delete + merge-on-read 且作用于非排序表，`GEOGRAPHY`/`UNKNOWN` 待 v2.0.0。
 - sqlite、excel、aws、azure、delta、ducklake、vss 等扩展覆盖了从本地文件到云存储、从关系数据库到向量检索的常见场景，各自有 autoload 行为与平台/格式限制；使用前应核对扩展与 DuckDB 版本的强绑定关系，跨版本升级时以 `FORCE INSTALL` 重新拉取匹配构建。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第五部分 性能与运维
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -3591,8 +3550,6 @@ duckdb duckdb:https://blobs.duckdb.org/databases/stations.duckdb
 ## 15.6 本章小结
 
 本章梳理了 DuckDB 的配置与性能调优要点。配置上，SET/PRAGMA、连接参数与环境变量四途并用，RESET 还原默认值，`current_setting()` 与 `duckdb_settings()` 用于查询，GLOBAL 与 LOCAL 区分实例级与会话级作用域。内存与线程方面，`memory_limit` 仅约束 buffer manager、实际可超，`threads` 默认占满核数需在容器与多租户场景中限制，`temp_directory` 与 `max_temp_directory_size` 管控 spill to disk 落盘，`checkpoint_threshold` 默认 16 MiB。性能实践上，恰当类型（如 `TIMESTAMP`、`BIGINT`）远优于 `VARCHAR`，约束与索引只保完整性、应在批量加载后追加，压缩持久化库常比未压缩内存表快约 8×，并行以 row group（122,880 行）为单位、每线程规划 1–4 GB，Parquet 宜采用 100K~1M 的 row group 与 100 MB~10 GB 单文件并借 Hive 分区助 filter pushdown。分析执行计划应善用 `EXPLAIN` 与 `EXPLAIN ANALYZE`，规避 nested loop join 与 cardinality explosion。面对 OOM 风险，须识别多 blocking operator 叠加、`list()`/`string_agg()`、排序聚合与 `PIVOT` 等不受落盘保护的场景，并以 `preserve_insertion_order=false` 与下调 `memory_limit` 缓解；v1.5.0 与 v1.5.2 的命令行已知坑亦需掌握对应绕过方式。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -3837,12 +3794,7 @@ duckdb.execute("... WHERE x = ?", [42])
 
 这些配置并非银弹，它们与操作系统沙箱、容器隔离共同构成纵深防御。在不可信输入面前，限制文件访问、禁用 root、使用预编译语句，才是最贴近本质的防线。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第六部分 原理剖析
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -4054,12 +4006,7 @@ VACUUM;
 
 掌握这些内部原理，有助于在实际调优时判断一条查询为何走某个计划、为何占用某等磁盘空间，以及并发写入应如何组织。
 
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 第七部分 实战与总结
-
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -4446,8 +4393,6 @@ Ibis 这类 DataFrame 库则以 DuckDB 为默认后端，提供链式、延迟�
 - **数据科学生态底座**：replacement scan 让 DataFrame 无需注册即可当表查，零拷贝贯通 Arrow；以 SQL 驱动 DataFrame 规避逐行 Python 瓶颈，Polars、Arrow、Ibis 各取所需，DuckDB 充当统一查询平面。
 
 上述场景共享同一个内核事实：DuckDB 是进程内、列式、向量化的分析引擎。正因无服务、单文件、与生态互操作成本低，它才能在同一份代码里既做随手查询、也做管线计算、还做嵌入式中台——场景切换的边际成本，往往只是一个文件的路径。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -4564,8 +4509,6 @@ DuckDB 以极宽松的 MIT License 发布，知识产权由 DuckDB Foundation �
 工具更迭是数据领域的常态，今天被追捧的引擎，未必能定义明天的实践。DuckDB 真正值得记住的，是它所坚持的一个朴素判断：把分析带到数据所在之处，而不是反过来让数据为分析让路。它用进程内消除了服务与网络的距离，用列存与向量化消除了计算与硬件的距离，又用湖仓与远程协议，谨慎地把这道距离的消解推向更广阔的协同规模。
 
 本书从安装与 SQL 起步，经数据工程、客户端集成、扩展机制、性能运维而至原理剖析，如今停在总结与展望。读者至此已握有描述 DuckDB 的词汇、调度它的机制与审视它的眼光——剩下的，是把这些放进真实的数据与真实的问题里去检验。每一次你径直对一份文件写下 `SELECT` 而不必先搭起一座系统，DuckDB 的设计初衷便已兑现。分析的价值不在于工具本身，而在于它缩短了多少次"从疑问到答案"的路程；愿这趟从入门到进阶的旅程，成为你缩短那路程的一步。
-
-
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```

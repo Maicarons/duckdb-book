@@ -8,7 +8,11 @@ title: 下载与资源
 
 ## 在线阅览（整书 PDF）
 
-<iframe class="pdf-frame" src="/duckdb-book/downloads/duckdb-book.pdf"></iframe>
+<iframe class="pdf-frame" src="/duckdb-book/downloads/duckdb-book.pdf" style="width:100%; height:80vh; min-height:520px; border:1px solid var(--vp-c-divider); border-radius:8px;"></iframe>
+
+<div style="margin:10px 0;">
+  <a href="/duckdb-book/downloads/duckdb-book.pdf" target="_blank" rel="noopener">在新标签页打开 PDF ↗</a>
+</div>
 
 > 若上方预览框无法加载，请直接使用下方按钮下载后在本地阅读器打开。
 
